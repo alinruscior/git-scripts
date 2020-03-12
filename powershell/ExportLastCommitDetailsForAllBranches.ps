@@ -1,0 +1,37 @@
+# A script that gets all the merged and not merged branches in the ‘master’ branch together with details:
+# last commit hash, date of last commit, author of last commit and writes the data in a csv (branches.csv) 
+# Script output example can be found in: git-scripts\SampleHistory.csv
+
+function GetBranchInfo {
+    param( $fullBranchName, $isMerged )
+        $branchName = $fullBranchName.Substring("origin/".Length)
+ 
+        $branchInfo = New-Object PSObject
+        $branchInfo | Add-Member -MemberType NoteProperty -Name "Branch Name" -Value $branchName
+        $branchInfo | Add-Member -MemberType NoteProperty -Name "Is Merged in master" -Value $isMerged
+        
+        $separator = ","[0]
+        $lastCommitDetails = (git log --max-count=1 --format="%H$separator%aI$separator%an" "$fullBranchName").Split(@($separator), 3)
+        
+        $branchInfo | Add-Member -MemberType NoteProperty -Name "Commit Hash" -Value $lastCommitDetails[0]
+        $branchInfo | Add-Member -MemberType NoteProperty -Name "Last Change" -Value ([System.DateTimeOffset]::Parse($lastCommitDetails[1]))
+        $branchInfo | Add-Member -MemberType NoteProperty -Name "Author" -Value $lastCommitDetails[2]
+ 
+        return $branchInfo
+   
+   }
+   
+$outputFileName = "branches.csv"
+ 
+$mergedBranches = (git branch --remotes --merged master) |
+    ForEach-Object { return GetBranchInfo -fullBranchName $_.Trim() -isMerged=$true }
+    
+ 
+$notMergedBranches = (git branch --remotes --no-merged master) |
+    ForEach-Object GetBranchInfo -fullBranchName $_.Trim() -isMerged $false
+ 
+$remoteBranches = ($mergedBranches + $notMergedBranches)
+ 
+$remoteBranches |
+        Sort-Object -Descending "Last Change" |
+        Export-Csv -NoTypeInformation -Encoding UTF8 $outputFileName
