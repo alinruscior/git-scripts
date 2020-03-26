@@ -16,7 +16,7 @@ https://github.com/alinruscior/git-scripts/blob/master/powershell/ExportLastComm
 
 https://github.com/alinruscior/git-scripts/blob/master/bash/ExportLastCommitDetailsForAllBranches.sh
 
-Sample output (tabs were used here for better visibility in the Readme file, in the csv ',' is the delimiter):
+Sample output (spaces were used here for better visibility in the Readme.md file, in the csv comma is the delimiter):
 
 Branch Name   Is Merged in master   Commit Hash                               Last Change                   Author
 
