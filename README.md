@@ -18,7 +18,7 @@ https://github.com/alinruscior/git-scripts/blob/master/bash/ExportLastCommitDeta
 
 Sample output (tabs were used here for better visibility in the Readme file, in the csv ',' is the delimiter):
 
-Branch Name 	Is Merged in master 	Commit Hash 	                            Last Change 	                Author
+Branch Name   Is Merged in master   Commit Hash                               Last Change                   Author
 
 branch1 	    Yes 	                3719af0f501dbaa505452a72674e2dd7ef4c8251 	2/19/2020 4:32:14 PM +02:00 	Alin Ruscior
 
